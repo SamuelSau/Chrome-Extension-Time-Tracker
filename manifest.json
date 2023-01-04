@@ -1,28 +1,26 @@
 {
-  "manifest_version": 2,
-  "name": "Time Tracker",
-  "description": "This extension tracks the time you spend on different websites.",
-  "version": "1.0",
-  "permissions": [
-    "storage",
-    "activeTab"
-  ],
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": true
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["styles.css"],
-      "run_at": "document_idle"
-    }
-  ],
-  "icons": {
-    "16": "icon16.png",
-    "32": "icon32.png",
-    "64": "icon64.png",
-    "128": "icon128.png"
-  }
+	"manifest_version": 2,
+	"name": "Time Tracker",
+	"description": "This extension tracks the time you spend on different websites.",
+	"version": "1.0",
+	"permissions": ["storage", "activeTab"],
+	"background": {
+		"scripts": ["background.js"],
+		"persistent": true
+	},
+	"content_scripts": [
+		{
+			"matches": ["https://www.youtube.com/*", "https://www.facebook.com/*", "https://www.tiktok.com/*", "https://www.youtube.com/*", "https://www.facebook.com/*", "https://www.tiktok.com/*", "https://www.whatsapp.com/*", "https://www.instagram.com/*", "https://www.snapchat.com/*", "https://www.reddit.com/*", "https://www.pinterest.com/*", "https://www.twitter.com/*", "https://www.twitch.tv/*", "https://www.discordapp.com/*"
+			],
+			"js": ["content.js"],
+			"css": ["styles.css"],
+			"run_at": "document_idle"
+		}
+	],
+	"icons": {
+		"16": "icon16.png",
+		"32": "icon32.png",
+		"64": "icon64.png",
+		"128": "icon128.png"
+	}
 }
