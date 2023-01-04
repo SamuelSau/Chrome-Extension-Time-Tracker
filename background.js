@@ -13,6 +13,13 @@ chrome.tabs.onCreated.addListener(function(tab) {
   currentTab = tab;
 });
 
+// Send a message to the content script to start tracking the time spent on the page
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    if (changeInfo.status == "complete") {
+      chrome.tabs.sendMessage(tabId, { action: "trackTime" });
+    }
+  });
+
 // Track the time spent on the current tab
 setInterval(function() {
   if (currentTab) {
