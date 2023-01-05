@@ -1,15 +1,12 @@
 {
 	"manifest_version": 3,
 	"name": "Social Media Tracker",
-	"description": "Displays timer when user goes on social media platforms.",
+	"description": "Displays total time spent on particular social media platform.",
 	"version": "1.0",
 	"permissions": ["storage", "tabs", "activeTab"],
 	"content_scripts": [
 		{
 			"matches": [
-				"https://www.youtube.com/*",
-				"https://www.facebook.com/*",
-				"https://www.tiktok.com/*",
 				"https://www.youtube.com/*",
 				"https://www.facebook.com/*",
 				"https://www.tiktok.com/*",
