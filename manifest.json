@@ -1,9 +1,9 @@
 {
 	"manifest_version": 3,
 	"name": "Time Tracker",
-	"description": "This extension tracks the time you spend on different websites.",
+	"description": "This extension tracks the time you spend on social media platforms.",
 	"version": "1.0",
-	"permissions": ["storage", "activeTab"],
+	"permissions": ["storage", "tabs", "windows"],
 	"background": {
 		"service_worker": "service-worker.js"
 	},
@@ -35,5 +35,14 @@
 		"32": "icon32.png",
 		"64": "icon64.png",
 		"128": "icon128.png"
+	},
+	"action": {
+		"default_popup": "time-tracker.html",
+		"default_icon": {
+			"16": "icon16.png",
+			"32": "icon32.png",
+			"64": "icon64.png",
+			"128": "icon128.png"
+		}
 	}
 }

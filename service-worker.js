@@ -1,45 +1,32 @@
-// Keep track of the current tab
-let currentTab = null;
-
-// Update the current tab whenever the active tab changes
-chrome.tabs.onActivated.addListener(function(activeInfo) {
-  chrome.tabs.get(activeInfo.tabId, function(tab) {
-    currentTab = tab;
-  });
+// Keep track of the number of tabs that are open
+let tabCount = 0;
+let startTime = 0;
+// Start a timer when the first tab is opened
+chrome.tabs.onActivated.addListener(function (activeInfo) {
+	tabCount++;
+	if (tabCount === 1) {
+		// Start the timer
+		startTime = Date.now();
+	}
 });
 
-// Update the current tab whenever a new tab is created
-chrome.tabs.onCreated.addListener(function(tab) {
-  currentTab = tab;
-});
-
-// Send a message to the content script to start tracking the time spent on the page
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-	if (changeInfo.status == 'complete') {
-		chrome.tabs.sendMessage(tabId, { action: 'trackTime' });
+// Stop the timer and save the elapsed time when the last tab is closed
+chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+	tabCount--;
+	if (tabCount === 0) {
+		// Stop the timer and save the elapsed time
+		let elapsedTime = Date.now() - startTime;
+		chrome.storage.local.set({ 'elapsed-time': elapsedTime });
 	}
 });
 
 // Listen for messages from the content script
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-	if (message.action == 'saveTimeSpent') {
-		// Save the time spent on the page to chrome.storage
-		chrome.storage.local.set({ [location.href]: message.timeSpent }).then(() => {
-			console.log(`Total time spent in seconds: ${message.timeSpent}`);
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+	if (request.type === 'get-elapsed-time') {
+		// Get the elapsed time from storage and send it back in the response
+		chrome.storage.local.get('elapsed-time', function (items) {
+			sendResponse({ elapsedTime: items['elapsed-time'] });
 		});
+		return true; // required to use sendResponse asynchronously
 	}
 });
-
-// // Track the time spent on the current tab
-// setInterval(function() {
-//   if (currentTab) {
-//     let url = currentTab.url;
-//     // Retrieve the time spent on the page from chrome.storage
-//     chrome.storage.local.get([url], function(items) {
-//       let timeSpent = items[url] || 0;
-//       timeSpent++;
-//       // Save the updated time spent on the page to chrome.storage
-//       chrome.storage.local.set({ url: timeSpent });
-//     });
-//   }
-// }, 1000);
