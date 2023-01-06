@@ -2,6 +2,15 @@ let timer = 0;
 // Get the current URL
 const url = window.location.href;
 
+// Check if the elapsed time is stored in Chrome's storage
+chrome.storage.local.get([url], result => {
+	// If the elapsed time is stored, use it as the starting value for the timer
+	if (result[url]) {
+	  timer = result[url];
+	}
+});
+
+//Create timer
 const timerDiv = document.createElement('div');
 timerDiv.id = 'timer';
 timerDiv.style.position = 'fixed';
@@ -18,15 +27,8 @@ timerDiv.style.fontSize = '24px';
 timerDiv.style.display = 'flex';
 timerDiv.style.alignItems = 'center';
 timerDiv.style.justifyContent = 'center';
+timerDiv.style.zIndex = '9998';
 document.body.appendChild(timerDiv);
-
-// Check if the elapsed time is stored in Chrome's storage
-chrome.storage.local.get([url], result => {
-	// If the elapsed time is stored, use it as the starting value for the timer
-	if (result[url]) {
-	  timer = result[url];
-	}
-  });
 
 setInterval(() => {
 	timer++;

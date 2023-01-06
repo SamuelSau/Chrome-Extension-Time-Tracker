@@ -28,5 +28,9 @@
 		"32": "icons/icon32.png",
 		"64": "icons/icon64.png",
 		"128": "icons/icon128.png"
+	},
+	"action": {
+		"default_title": "Click Me",
+		"default_popup": "popup.html"
 	}
 }
