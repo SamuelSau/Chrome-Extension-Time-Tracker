@@ -2,7 +2,10 @@ let timer = 0;
 // Get the current URL
 const url = window.location.href;
 
-// Check if the elapsed time is stored in Chrome's storage
+/*Even if refresh, still grab from local storage
+Check if the elapsed time is stored in Chrome's storage 
+*/
+
 chrome.storage.local.get([url], result => {
 	// If the elapsed time is stored, use it as the starting value for the timer
 	if (result[url]) {
@@ -29,8 +32,8 @@ timerDiv.style.alignItems = 'center';
 timerDiv.style.justifyContent = 'center';
 timerDiv.style.zIndex = '9998';
 document.body.appendChild(timerDiv);
-
-setInterval(() => {
+try{ 
+	setInterval(() => {
 	timer++;
 	const days = Math.floor(timer / 86400);
 	const hours = Math.floor((timer % 86400) / 3600);
@@ -41,6 +44,9 @@ setInterval(() => {
 	).innerHTML = `${days}D::${hours}H::${minutes}M::${seconds}S`;
 	// Store the elapsed time in Chrome's storage
 	chrome.storage.local.set({ [url]: timer });
+	
 }, 1000);
-
-//@TODO: Create button that popups window to display pie chart and total time spent for each application
+}
+catch(error){
+	console.log(error)
+}
