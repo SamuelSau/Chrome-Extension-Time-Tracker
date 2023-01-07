@@ -1,19 +1,19 @@
 let timer = 0;
+
 // Get the current URL
 const url = window.location.href;
 
 /*Even if refresh, still grab from local storage
 Check if the elapsed time is stored in Chrome's storage 
 */
-
-chrome.storage.local.get([url], result => {
+chrome.storage.local.get([url], (result) => {
 	// If the elapsed time is stored, use it as the starting value for the timer
 	if (result[url]) {
-	  timer = result[url];
+		timer = result[url];
 	}
 });
 
-//Create timer
+// Create timer div
 const timerDiv = document.createElement('div');
 timerDiv.id = 'timer';
 timerDiv.style.position = 'fixed';
@@ -32,21 +32,18 @@ timerDiv.style.alignItems = 'center';
 timerDiv.style.justifyContent = 'center';
 timerDiv.style.zIndex = '9998';
 document.body.appendChild(timerDiv);
-try{ 
-	setInterval(() => {
+
+function updateTimer() {
 	timer++;
-	const days = Math.floor(timer / 86400);
-	const hours = Math.floor((timer % 86400) / 3600);
-	const minutes = Math.floor(((timer % 86400) % 3600) / 60);
-	const seconds = ((timer % 86400) % 3600) % 60;
+	const hours = (timer / 86400) | 0;
+	const minutes = ((timer % 86400) / 3600) | 0;
+	const seconds = (((timer % 86400) % 3600) / 60) | 0;
 	document.getElementById(
 		'timer'
-	).innerHTML = `${days}D::${hours}H::${minutes}M::${seconds}S`;
+	).innerHTML = `${hours}h ${minutes}m ${seconds}s`;
 	// Store the elapsed time in Chrome's storage
 	chrome.storage.local.set({ [url]: timer });
-	
-}, 1000);
+	requestAnimationFrame(updateTimer);
 }
-catch(error){
-	console.log(error)
-}
+
+requestAnimationFrame(updateTimer);
