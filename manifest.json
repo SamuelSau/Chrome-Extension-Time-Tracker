@@ -17,7 +17,7 @@
 				"https://www.pinterest.com/*",
 				"https://www.twitter.com/*",
 				"https://www.twitch.tv/*",
-				"https://www.discordapp.com/*"
+				"https://discord.com/*"
 			],
 			"js": ["content.js"],
 			"run_at": "document_idle"
