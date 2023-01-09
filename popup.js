@@ -1,9 +1,3 @@
-let ctx = document.querySelector('canvas').getContext('2d');
-const timers = {
-	name: '',
-	timeSpent: 0,
-};
-
 //Query URL that our extension runs on and apply the timer value to the pie chart
 async function getResults() {
 	await chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -62,18 +56,62 @@ async function getResults() {
 				0
 			);
 			let currentAngle = 0;
+			const canvas = document.querySelector('canvas');
+			const ctx = canvas.getContext('2d');
+			// Get the dimensions of the canvas element
+			const width = canvas.offsetWidth;
+			const height = canvas.offsetHeight;
+
+			// Calculate the center coordinates of the pie chart
+			const centerX = width / 2;
+			const centerY = height / 2;
 
 			for (let name of elapsedTimes) {
-				//calculating the angle the slice (portion) will take in the chart
-				let portionAngle = (name.timeSpent / totalNumberOfWebsites) * 2 * Math.PI;
-				//drawing an arc and a line to the center to differentiate the slice from the rest
+				// Calculating the angle the slice (portion) will take in the chart
+				let portionAngle =
+					(name.timeSpent / totalNumberOfWebsites) * 2 * Math.PI;
+				// Drawing an arc and a line to the center to differentiate the slice from the rest
 				ctx.beginPath();
-				ctx.arc(100, 100, 100, currentAngle, currentAngle + portionAngle);
+				ctx.arc(
+					centerX,
+					centerY,
+					100,
+					currentAngle,
+					currentAngle + portionAngle
+				);
 				currentAngle += portionAngle;
-				ctx.lineTo(100, 100);
-				//filling the slices with the corresponding mood's color
+				ctx.lineTo(centerX, centerY);
+				// Filling the slices with the corresponding shade
 				ctx.fillStyle = name.shade;
 				ctx.fill();
+			}
+			const table = document.getElementById('time-spent-table');
+
+			//Dynamically display the website name, timespent (%), and total time spent
+			for (let { name, timeSpent } of elapsedTimes) {
+				// Calculate the percentage of time spent on the website
+				const percentage = (timeSpent / totalNumberOfWebsites) * 100;
+
+				// Create a new row for the website
+				const row = document.createElement('tr');
+
+				// Create cells for the website name, percentage, and total time spent
+				const nameCell = document.createElement('td');
+				nameCell.textContent = name;
+				row.appendChild(nameCell);
+
+				const percentageCell = document.createElement('td');
+				percentageCell.textContent = `${percentage.toFixed(2)}%`;
+				row.appendChild(percentageCell);
+
+				const timeSpentCell = document.createElement('td');
+				const hours = (timeSpent / 86400) | 0;
+				const minutes = ((timeSpent % 86400) / 3600) | 0;
+				const seconds = (((timeSpent % 86400) % 3600) / 60) | 0;
+				timeSpentCell.textContent = `${hours}h ${minutes}m ${seconds}s`;
+				row.appendChild(timeSpentCell);
+				// Add the row to the table
+				table.appendChild(row);
 			}
 		});
 	});
