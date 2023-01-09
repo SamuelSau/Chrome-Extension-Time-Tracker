@@ -1,15 +1,17 @@
 let timer = 0;
 
-// Get the current URL
+// Get the current parsedUrl
 const url = window.location.href;
+const newUrl = new URL(url);
+const parsedUrl = newUrl.hostname;
 
 /*Even if refresh, still grab from local storage
 Check if the elapsed time is stored in Chrome's storage 
 */
-chrome.storage.local.get([url], (result) => {
+chrome.storage.local.get([parsedUrl], (result) => {
 	// If the elapsed time is stored, use it as the starting value for the timer
-	if (result[url]) {
-		timer = result[url];
+	if (result[parsedUrl]) {
+		timer = result[parsedUrl];
 	}
 });
 
@@ -42,7 +44,7 @@ function updateTimer() {
 		'timer'
 	).innerHTML = `${hours}h ${minutes}m ${seconds}s`;
 	// Store the elapsed time in Chrome's storage
-	chrome.storage.local.set({ [url]: timer });
+	chrome.storage.local.set({ [parsedUrl]: timer });
 	requestAnimationFrame(updateTimer);
 }
 
