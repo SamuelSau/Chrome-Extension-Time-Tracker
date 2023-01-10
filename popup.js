@@ -4,8 +4,8 @@ async function getResults() {
 		// Get the elapsed time for each website from Chrome's local storage
 		chrome.storage.local.get(null, (result) => {
 			// Create an array of objects representing the elapsed times for each website
-			const elapsedTimes = Object.keys(result).map((key) => {
-				let shade;
+			let elapsedTimes = Object.keys(result).map((key) => {
+				let shade; //custom colors that social media application uses
 				switch (key) {
 					case 'www.youtube.com':
 						shade = '#ff0000';
@@ -13,7 +13,7 @@ async function getResults() {
 					case 'www.facebook.com':
 						shade = '#1877f2';
 						break;
-					case 'www.tiktok.com'://
+					case 'www.tiktok.com': //
 						shade = '#010101';
 						break;
 					case 'www.whatsapp.com':
@@ -31,13 +31,13 @@ async function getResults() {
 					case 'www.pinterest.com':
 						shade = '#bd081c';
 						break;
-					case 'twitter.com'://
+					case 'twitter.com': //
 						shade = '#1da1f2';
 						break;
 					case 'www.twitch.tv':
 						shade = '#9146ff';
 						break;
-					case 'discord.com'://
+					case 'discord.com': //
 						shade = '#5865f2';
 						break;
 					default:
@@ -50,7 +50,7 @@ async function getResults() {
 				};
 			});
 
-		//Create the pie chart
+			//Create the pie chart
 			let sum = 0;
 			let totalNumberOfWebsites = elapsedTimes.reduce(
 				(sum, { timeSpent }) => sum + timeSpent,
@@ -86,10 +86,10 @@ async function getResults() {
 				ctx.fillStyle = name.shade;
 				ctx.fill();
 			}
-			
+
 			const table = document.getElementById('time-spent-table');
 
-			//Sort the array based on highest to lowest time spent 
+			//Sort the array based on highest to lowest time spent
 			elapsedTimes.sort((a, b) => b.timeSpent - a.timeSpent);
 
 			//Dynamically display the website name, timespent (%), and total time spent
@@ -122,6 +122,40 @@ async function getResults() {
 
 				//Add the row to the table
 				table.appendChild(row);
+
+				//Reset functionality
+				const resetButton = document.querySelector('#reset-button');
+				resetButton.addEventListener('click', resetTimers);
+
+				function resetTimers() {
+					chrome.storage.local.clear(function () {
+						let error = chrome.runtime.lastError;
+						if (error) {
+							console.error(error);
+						}
+						// Reset the elapsed times and update the table and pie chart
+						for (let { name, timeSpent, shade } of elapsedTimes) {
+							name = null;
+							timeSpent = null;
+							shade = null;
+						}
+						removeTable();
+						removeCanvas();
+					});
+				}
+
+				function removeTable() {
+					// Clear the table
+					while (table.firstChild) {
+						table.removeChild(table.firstChild);
+					}
+				}
+				function removeCanvas() {
+					// Clear the canvas
+					const canvas = document.querySelector('canvas');
+					const ctx = canvas.getContext('2d');
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+				}
 			}
 		});
 	});
