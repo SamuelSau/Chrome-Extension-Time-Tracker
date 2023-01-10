@@ -13,7 +13,7 @@ async function getResults() {
 					case 'www.facebook.com':
 						shade = '#1877f2';
 						break;
-					case 'www.tiktok.com': //
+					case 'www.tiktok.com': 
 						shade = '#010101';
 						break;
 					case 'www.whatsapp.com':
@@ -31,13 +31,13 @@ async function getResults() {
 					case 'www.pinterest.com':
 						shade = '#bd081c';
 						break;
-					case 'twitter.com': //
+					case 'twitter.com': 
 						shade = '#1da1f2';
 						break;
 					case 'www.twitch.tv':
 						shade = '#9146ff';
 						break;
-					case 'discord.com': //
+					case 'discord.com': 
 						shade = '#5865f2';
 						break;
 					default:

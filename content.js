@@ -33,6 +33,7 @@ timerDiv.style.display = 'flex';
 timerDiv.style.alignItems = 'center';
 timerDiv.style.justifyContent = 'center';
 timerDiv.style.zIndex = '9998';
+timerDiv.style.fontFamily = "Montserrat", sans-serif;
 document.body.appendChild(timerDiv);
 
 function updateTimer() {
