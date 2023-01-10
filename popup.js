@@ -13,7 +13,7 @@ async function getResults() {
 					case 'www.facebook.com':
 						shade = '#1877f2';
 						break;
-					case 'www.tiktok.com':
+					case 'www.tiktok.com'://
 						shade = '#010101';
 						break;
 					case 'www.whatsapp.com':
@@ -31,13 +31,13 @@ async function getResults() {
 					case 'www.pinterest.com':
 						shade = '#bd081c';
 						break;
-					case 'www.twiter.com':
+					case 'twitter.com'://
 						shade = '#1da1f2';
 						break;
 					case 'www.twitch.tv':
 						shade = '#9146ff';
 						break;
-					case 'www.discord.com':
+					case 'discord.com'://
 						shade = '#5865f2';
 						break;
 					default:
@@ -50,6 +50,7 @@ async function getResults() {
 				};
 			});
 
+		//Create the pie chart
 			let sum = 0;
 			let totalNumberOfWebsites = elapsedTimes.reduce(
 				(sum, { timeSpent }) => sum + timeSpent,
@@ -58,19 +59,19 @@ async function getResults() {
 			let currentAngle = 0;
 			const canvas = document.querySelector('canvas');
 			const ctx = canvas.getContext('2d');
-			// Get the dimensions of the canvas element
+			//Get the dimensions of the canvas element
 			const width = canvas.offsetWidth;
 			const height = canvas.offsetHeight;
 
-			// Calculate the center coordinates of the pie chart
+			//Calculate the center coordinates of the pie chart
 			const centerX = width / 2;
 			const centerY = height / 2;
 
 			for (let name of elapsedTimes) {
-				// Calculating the angle the slice (portion) will take in the chart
+				//Calculating the angle the slice (portion) will take in the chart
 				let portionAngle =
 					(name.timeSpent / totalNumberOfWebsites) * 2 * Math.PI;
-				// Drawing an arc and a line to the center to differentiate the slice from the rest
+				//Drawing an arc and a line to the center to differentiate the slice from the rest
 				ctx.beginPath();
 				ctx.arc(
 					centerX,
@@ -81,21 +82,25 @@ async function getResults() {
 				);
 				currentAngle += portionAngle;
 				ctx.lineTo(centerX, centerY);
-				// Filling the slices with the corresponding shade
+				//Filling the slices with the corresponding shade
 				ctx.fillStyle = name.shade;
 				ctx.fill();
 			}
+			
 			const table = document.getElementById('time-spent-table');
 
+			//Sort the array based on highest to lowest time spent 
+			elapsedTimes.sort((a, b) => b.timeSpent - a.timeSpent);
+
 			//Dynamically display the website name, timespent (%), and total time spent
-			for (let { name, timeSpent } of elapsedTimes) {
-				// Calculate the percentage of time spent on the website
+			for (let { name, timeSpent, shade } of elapsedTimes) {
+				//Calculate the percentage of time spent on the website
 				const percentage = (timeSpent / totalNumberOfWebsites) * 100;
 
-				// Create a new row for the website
+				//Create a new row for the website
 				const row = document.createElement('tr');
 
-				// Create cells for the website name, percentage, and total time spent
+				//Create cells for the website name, percentage, and total time spent
 				const nameCell = document.createElement('td');
 				nameCell.textContent = name;
 				row.appendChild(nameCell);
@@ -110,7 +115,12 @@ async function getResults() {
 				const seconds = (((timeSpent % 86400) % 3600) / 60) | 0;
 				timeSpentCell.textContent = `${hours}h ${minutes}m ${seconds}s`;
 				row.appendChild(timeSpentCell);
-				// Add the row to the table
+
+				const shadeCell = document.createElement('td');
+				shadeCell.style.backgroundColor = shade;
+				row.appendChild(shadeCell);
+
+				//Add the row to the table
 				table.appendChild(row);
 			}
 		});
