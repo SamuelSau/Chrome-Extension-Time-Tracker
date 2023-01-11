@@ -33,7 +33,7 @@ timerDiv.style.display = 'flex';
 timerDiv.style.alignItems = 'center';
 timerDiv.style.justifyContent = 'center';
 timerDiv.style.zIndex = '9998';
-timerDiv.style.fontFamily = "Montserrat", sans-serif;
+
 document.body.appendChild(timerDiv);
 
 function updateTimer() {
@@ -44,8 +44,15 @@ function updateTimer() {
 	document.getElementById(
 		'timer'
 	).innerHTML = `${hours}h ${minutes}m ${seconds}s`;
-	// Store the elapsed time in Chrome's storage
-	chrome.storage.local.set({ [parsedUrl]: timer });
+	//Check if extension runs on the social media site
+	try {
+		if(chrome.runtime.id){
+			// Store the elapsed time in Chrome's storage
+		   chrome.storage.local.set({ [parsedUrl]: timer });
+		}
+	  } catch(err) {
+		  console.log("Error: extension context invalidated")
+	  }
 	requestAnimationFrame(updateTimer);
 }
 
