@@ -5,16 +5,6 @@ const url = window.location.href;
 const newUrl = new URL(url);
 const parsedUrl = newUrl.hostname;
 
-/*Even if refresh, still grab from local storage
-Check if the elapsed time is stored in Chrome's storage 
-*/
-chrome.storage.local.get([parsedUrl], (result) => {
-	// If the elapsed time is stored, use it as the starting value for the timer
-	if (result[parsedUrl]) {
-		timer = result[parsedUrl];
-	}
-});
-
 // Create timer div
 const timerDiv = document.createElement('div');
 timerDiv.id = 'timer';

@@ -133,12 +133,6 @@ async function getResults() {
 						if (error) {
 							console.error(error);
 						}
-						// Reset the elapsed times and update the table and pie chart
-						for (let { name, timeSpent, shade } of elapsedTimes) {
-							name = null;
-							timeSpent = null;
-							shade = null;
-						}
 						removeTable();
 						removeCanvas();
 					});
