@@ -3,7 +3,7 @@
 	"name": "Social Media Time Tracker",
 	"description": "Display analytics for time spent for particular social media platform.",
 	"version": "0.0.0.1",
-	"permissions": ["storage", "tabs"],
+	"permissions": ["storage"],
 	"content_scripts": [
 		{
 			"matches": [
